@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tables (
+    id SERIAL PRIMARY KEY,
+    x INTEGER NOT NULL,
+    y INTEGER NOT NULL,
+    angle INTEGER NOT NULL,
+    seats_number INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    table_id INTEGER REFERENCES tables(id),
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP
+);

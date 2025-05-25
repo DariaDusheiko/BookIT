@@ -1,0 +1,37 @@
+# Исполняемые файлы
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Файлы сборки
+bin/
+build/
+
+# Файлы кэша Go
+*.test
+*.out
+
+# Каталог с модулями
+vendor/
+
+# Файлы IDE и редакторов
+.vscode/
+.idea/
+*.iml
+
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Файлы покрытия тестов
+coverage.out
+
+# Файлы временные и backup
+*~
+
+config/.env

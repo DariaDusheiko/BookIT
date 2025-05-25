@@ -1,0 +1,208 @@
+definitions:
+  bookings.BookingResponse:
+    properties:
+      end_time:
+        type: string
+      id:
+        type: integer
+      start_time:
+        type: string
+      table_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  bookings.CreateBookingRequest:
+    properties:
+      end_time:
+        type: string
+      start_time:
+        type: string
+      table_id:
+        type: integer
+    required:
+    - start_time
+    - table_id
+    type: object
+  bookings.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  tables.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  tables.GetTablesRequest:
+    properties:
+      end:
+        type: string
+      start:
+        type: string
+    type: object
+  tables.GetTablesResponse:
+    properties:
+      tables:
+        items:
+          $ref: '#/definitions/tables.TableResponse'
+        type: array
+    type: object
+  tables.TableResponse:
+    properties:
+      angle:
+        type: integer
+      id:
+        type: integer
+      occupied:
+        type: boolean
+      seats_number:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  users.AuthRequest:
+    properties:
+      phone_number:
+        type: string
+      username:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - phone_number
+    - username
+    type: object
+  users.AuthResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  users.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates existing user or creates new user if phone number
+        doesn't exist. Returns JWT token for authorized requests.
+      parameters:
+      - description: User credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/users.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully authenticated/registered
+          schema:
+            $ref: '#/definitions/users.AuthResponse'
+        "400":
+          description: Invalid request format or validation error
+          schema:
+            $ref: '#/definitions/users.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/users.ErrorResponse'
+      summary: User authentication/registration
+      tags:
+      - auth
+  /bookings:
+    post:
+      consumes:
+      - application/json
+      description: Create a new table booking for authenticated user
+      parameters:
+      - description: JWT Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: Booking details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bookings.CreateBookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bookings.BookingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new booking
+      tags:
+      - bookings
+  /tables:
+    post:
+      consumes:
+      - application/json
+      description: Returns list of tables with occupancy status for given time range
+      parameters:
+      - description: JWT Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: Time range
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/tables.GetTablesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tables.GetTablesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/tables.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/tables.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/tables.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/tables.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get tables with occupancy status
+      tags:
+      - tables
+swagger: "2.0"
