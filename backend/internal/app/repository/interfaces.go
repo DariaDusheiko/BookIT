@@ -1,11 +1,9 @@
 package repositories
 
-// ждем прибавления описания типов переменных пришедших общаться с бд....
-// именно после изменений файла выше надо и тут все добавить данные!
-
 import (
-	"github.com/BookIT/backend/internal/app/models"
 	"time"
+
+	"github.com/BookIT/backend/internal/app/models"
 )
 
 type UserRepository interface {
@@ -19,6 +17,9 @@ type BookingRepository interface {
 	GetOngoingBookingsForTable(tableID uint, from time.Time) ([]models.Booking, error)
 	GetBookingsInRange(start, end time.Time) ([]models.Booking, error)
 	GetOngoingBookings(from time.Time) ([]models.Booking, error)
+	GetBookingByID(bookingID uint) (*models.Booking, error)
+	DeleteBooking(bookingID uint) error
+	GetUserBookings(userID uint) ([]models.Booking, error)
 }
 
 type TableRepository interface {

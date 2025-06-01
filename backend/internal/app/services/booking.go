@@ -12,14 +12,16 @@ package services
 import (
 	"errors"
 	"time"
-	
+
 	"github.com/BookIT/backend/internal/app/models"
-	"github.com/BookIT/backend/internal/app/repository"
+	repositories "github.com/BookIT/backend/internal/app/repository"
 )
 
 type BookingService interface {
 	Create(userID, tableID uint, start time.Time, end *time.Time) (*models.Booking, error)
 	IsTableAvailable(tableID uint, start time.Time, end *time.Time) (bool, error)
+	Delete(userID, bookingID uint) error
+	GetUserBookings(userID uint) ([]models.Booking, error)
 }
 
 type bookingService struct {
@@ -72,4 +74,24 @@ func (s *bookingService) IsTableAvailable(tableID uint, start time.Time, end *ti
 	}
 
 	return len(bookings) == 0, nil
+}
+
+func (s *bookingService) Delete(userID, bookingID uint) error {
+	booking, err := s.repo.GetBookingByID(bookingID)
+	if err != nil {
+		return err // 500
+	}
+	if booking == nil {
+		return errors.New("booking not found") // 404
+	}
+
+	if booking.UserID != userID {
+		return errors.New("forbidden") // 403
+	}
+
+	return s.repo.DeleteBooking(bookingID)
+}
+
+func (s *bookingService) GetUserBookings(userID uint) ([]models.Booking, error) {
+	return s.repo.GetUserBookings(userID)
 }

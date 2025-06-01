@@ -5,8 +5,8 @@ package bookings
 import "time"
 
 type CreateBookingRequest struct {
-	TableID   uint      `json:"table_id" binding:"required"`
-	StartTime time.Time `json:"start_time" binding:"required"`
+	TableID   uint       `json:"table_id" binding:"required"`
+	StartTime time.Time  `json:"start_time" binding:"required"`
 	EndTime   *time.Time `json:"end_time"`
 }
 
@@ -20,4 +20,16 @@ type BookingResponse struct {
 
 type ErrorResponse struct {
 	Error string `json:"error"`
+}
+
+type DeleteBookingRequest struct {
+	BookingID uint `json:"booking_id" binding:"required"`
+}
+
+type DeleteBookingResponse struct {
+	Message string `json:"message"`
+}
+
+type UserBookingsResponse struct {
+	Bookings []BookingResponse `json:"bookings"`
 }

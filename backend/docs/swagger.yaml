@@ -24,10 +24,29 @@ definitions:
     - start_time
     - table_id
     type: object
+  bookings.DeleteBookingRequest:
+    properties:
+      booking_id:
+        type: integer
+    required:
+    - booking_id
+    type: object
+  bookings.DeleteBookingResponse:
+    properties:
+      message:
+        type: string
+    type: object
   bookings.ErrorResponse:
     properties:
       error:
         type: string
+    type: object
+  bookings.UserBookingsResponse:
+    properties:
+      bookings:
+        items:
+          $ref: '#/definitions/bookings.BookingResponse'
+        type: array
     type: object
   tables.ErrorResponse:
     properties:
@@ -120,6 +139,54 @@ paths:
       tags:
       - auth
   /bookings:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user's booking by ID
+      parameters:
+      - description: JWT Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: Booking ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/bookings.DeleteBookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bookings.DeleteBookingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a booking
+      tags:
+      - bookings
     post:
       consumes:
       - application/json
@@ -158,6 +225,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create a new booking
+      tags:
+      - bookings
+  /bookings/info:
+    get:
+      consumes:
+      - application/json
+      description: Get all bookings for authenticated user
+      parameters:
+      - description: JWT Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bookings.UserBookingsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user bookings
       tags:
       - bookings
   /tables:

@@ -29,3 +29,25 @@ func (s *BookingSchemas) NewBookingResponse(booking *models.Booking) *BookingRes
 func (s *BookingSchemas) NewErrorResponse(message string) *ErrorResponse {
 	return &ErrorResponse{Error: message}
 }
+
+func (s *BookingSchemas) ValidateDeleteRequest(c *gin.Context) (*DeleteBookingRequest, error) {
+	var req DeleteBookingRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}
+
+func (s *BookingSchemas) NewDeleteResponse() *DeleteBookingResponse {
+	return &DeleteBookingResponse{
+		Message: "Booking deleted successfully",
+	}
+}
+
+func (s *BookingSchemas) NewUserBookingsResponse(bookings []models.Booking) *UserBookingsResponse {
+	result := make([]BookingResponse, 0, len(bookings))
+	for _, b := range bookings {
+		result = append(result, *s.NewBookingResponse(&b))
+	}
+	return &UserBookingsResponse{Bookings: result}
+}
