@@ -4,13 +4,14 @@ package main
 
 import (
 	"log"
+
 	"github.com/BookIT/backend/config"
 
 	"github.com/BookIT/backend/internal/app/handlers/bookings"
-	"github.com/BookIT/backend/internal/app/handlers/users"
 	"github.com/BookIT/backend/internal/app/handlers/tables"
+	"github.com/BookIT/backend/internal/app/handlers/users"
 
-	"github.com/BookIT/backend/internal/app/repository"
+	repositories "github.com/BookIT/backend/internal/app/repository"
 	"github.com/BookIT/backend/internal/app/services"
 
 	"github.com/BookIT/backend/internal/pkg/db"
@@ -49,8 +50,8 @@ func setupRoutes(r *gin.Engine) {
 	bookingRepo := repositories.NewBookingRepository(db.DB)
 	tableRepo := repositories.NewTableRepository(db.DB)
 
-	userService := services.NewUserService(userRepo) 
-	bookingService := services.NewBookingService(bookingRepo, tableRepo) 
+	userService := services.NewUserService(userRepo)
+	bookingService := services.NewBookingService(bookingRepo, tableRepo)
 	tableService := services.NewTableService(tableRepo, bookingRepo)
 
 	userHandler := users.NewUserHandler(userService)
@@ -66,7 +67,7 @@ func setupRoutes(r *gin.Engine) {
 	bookingGroup.Use(middleware.AuthMiddleware())
 	{
 		bookingGroup.POST("/", bookingHandler.CreateBooking)
-		// bookingGroup.DELETE("/", bookingHandler.DeleteBooking)
+		bookingGroup.DELETE("/", bookingHandler.DeleteBooking)
 		// bookingGroup.POST("info/", bookingHandler.InfoBooking)
 	}
 
