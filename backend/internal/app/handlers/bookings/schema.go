@@ -44,3 +44,11 @@ func (s *BookingSchemas) NewDeleteResponse() *DeleteBookingResponse {
 		Message: "Booking deleted successfully",
 	}
 }
+
+func (s *BookingSchemas) NewUserBookingsResponse(bookings []models.Booking) *UserBookingsResponse {
+	result := make([]BookingResponse, 0, len(bookings))
+	for _, b := range bookings {
+		result = append(result, *s.NewBookingResponse(&b))
+	}
+	return &UserBookingsResponse{Bookings: result}
+}

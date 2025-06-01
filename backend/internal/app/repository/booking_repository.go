@@ -81,3 +81,11 @@ func (r *bookingRepository) GetBookingByID(bookingID uint) (*models.Booking, err
 func (r *bookingRepository) DeleteBooking(bookingID uint) error {
 	return r.db.Where("id = ?", bookingID).Delete(&models.Booking{}).Error
 }
+
+func (r *bookingRepository) GetUserBookings(userID uint) ([]models.Booking, error) {
+	var bookings []models.Booking
+	err := r.db.Where("user_id = ?", userID).
+		Order("start_time DESC"). // Сначала новые бронирования
+		Find(&bookings).Error
+	return bookings, err
+}

@@ -21,6 +21,7 @@ type BookingService interface {
 	Create(userID, tableID uint, start time.Time, end *time.Time) (*models.Booking, error)
 	IsTableAvailable(tableID uint, start time.Time, end *time.Time) (bool, error)
 	Delete(userID, bookingID uint) error
+	GetUserBookings(userID uint) ([]models.Booking, error)
 }
 
 type bookingService struct {
@@ -89,4 +90,8 @@ func (s *bookingService) Delete(userID, bookingID uint) error {
 	}
 
 	return s.repo.DeleteBooking(bookingID)
+}
+
+func (s *bookingService) GetUserBookings(userID uint) ([]models.Booking, error) {
+	return s.repo.GetUserBookings(userID)
 }

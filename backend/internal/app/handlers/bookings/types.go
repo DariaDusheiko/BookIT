@@ -29,3 +29,7 @@ type DeleteBookingRequest struct {
 type DeleteBookingResponse struct {
 	Message string `json:"message"`
 }
+
+type UserBookingsResponse struct {
+	Bookings []BookingResponse `json:"bookings"`
+}

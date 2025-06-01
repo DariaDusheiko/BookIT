@@ -1,8 +1,5 @@
 package repositories
 
-// ждем прибавления описания типов переменных пришедших общаться с бд....
-// именно после изменений файла выше надо и тут все добавить данные!
-
 import (
 	"time"
 
@@ -22,6 +19,7 @@ type BookingRepository interface {
 	GetOngoingBookings(from time.Time) ([]models.Booking, error)
 	GetBookingByID(bookingID uint) (*models.Booking, error)
 	DeleteBooking(bookingID uint) error
+	GetUserBookings(userID uint) ([]models.Booking, error)
 }
 
 type TableRepository interface {

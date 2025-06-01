@@ -138,3 +138,34 @@ func (h *BookingHandler) DeleteBooking(c *gin.Context) {
 	}
 	c.JSON(200, h.schemas.NewDeleteResponse())
 }
+
+// GetUserBookings godoc
+// @Summary Get user bookings
+// @Description Get all bookings for authenticated user
+// @Tags bookings
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param X-Auth-Token header string true "JWT Token"
+// @Success 200 {object} UserBookingsResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /bookings/info [get]
+func (h *BookingHandler) GetUserBookings(c *gin.Context) {
+	// Авторизация пользователя
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(401, h.schemas.NewErrorResponse("authentication required"))
+		return
+	}
+
+	// Получение бронирований через сервис
+	bookings, err := h.service.GetUserBookings(userID.(uint))
+	if err != nil {
+		c.JSON(500, h.schemas.NewErrorResponse(err.Error()))
+		return
+	}
+
+	// Формирование ответа
+	c.JSON(200, h.schemas.NewUserBookingsResponse(bookings))
+}

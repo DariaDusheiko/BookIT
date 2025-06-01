@@ -68,7 +68,7 @@ func setupRoutes(r *gin.Engine) {
 	{
 		bookingGroup.POST("/", bookingHandler.CreateBooking)
 		bookingGroup.DELETE("/", bookingHandler.DeleteBooking)
-		// bookingGroup.POST("info/", bookingHandler.InfoBooking)
+		bookingGroup.POST("info/", bookingHandler.GetUserBookings)
 	}
 
 	tableGroup := r.Group("/tables")
