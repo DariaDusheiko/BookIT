@@ -41,6 +41,13 @@ definitions:
       error:
         type: string
     type: object
+  bookings.UserBookingsResponse:
+    properties:
+      bookings:
+        items:
+          $ref: '#/definitions/bookings.BookingResponse'
+        type: array
+    type: object
   tables.ErrorResponse:
     properties:
       error:
@@ -218,6 +225,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create a new booking
+      tags:
+      - bookings
+  /bookings/info:
+    get:
+      consumes:
+      - application/json
+      description: Get all bookings for authenticated user
+      parameters:
+      - description: JWT Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bookings.UserBookingsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/bookings.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user bookings
       tags:
       - bookings
   /tables:
