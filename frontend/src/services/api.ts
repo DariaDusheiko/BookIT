@@ -2,7 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import type { AuthRequest, AuthResponse, Booking, Table, BookingRequest, BookingStatus } from '../types/api';
 
-const API_URL = '/api';
+
+const API_URL = import.meta.env.VITE_API_URL
 const TOKEN_COOKIE_NAME = 'auth_token';
 
 // API client setup

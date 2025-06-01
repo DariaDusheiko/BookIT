@@ -20,7 +20,6 @@ func (s *BookingSchemas) ValidateCreateRequest(c *gin.Context) (*CreateBookingRe
 func (s *BookingSchemas) NewBookingResponse(booking *models.Booking) *BookingResponse {
 	return &BookingResponse{
 		ID:        booking.ID,
-		UserID:    booking.UserID,
 		TableID:   booking.TableID,
 		StartTime: booking.StartTime,
 		EndTime:   booking.EndTime,
