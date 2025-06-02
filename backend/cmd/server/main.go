@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/BookIT/backend/config"
+	"github.com/gin-contrib/cors"
 
 	"github.com/BookIT/backend/internal/app/handlers/bookings"
 	"github.com/BookIT/backend/internal/app/handlers/tables"
@@ -35,6 +36,15 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"X-Auth-Token", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+		ExposeHeaders:    []string{"*"},
+	}))
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	setupRoutes(r)
@@ -68,7 +78,7 @@ func setupRoutes(r *gin.Engine) {
 	{
 		bookingGroup.POST("/", bookingHandler.CreateBooking)
 		bookingGroup.DELETE("/", bookingHandler.DeleteBooking)
-		bookingGroup.POST("info/", bookingHandler.GetUserBookings)
+		bookingGroup.POST("/info", bookingHandler.GetUserBookings)
 	}
 
 	tableGroup := r.Group("/tables")

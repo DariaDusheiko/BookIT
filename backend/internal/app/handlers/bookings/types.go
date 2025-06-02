@@ -11,7 +11,7 @@ type CreateBookingRequest struct {
 }
 
 type BookingResponse struct {
-	ID        uint       `json:"id"`
+	ID        uint       `json:"booking_id"`
 	UserID    uint       `json:"user_id"`
 	TableID   uint       `json:"table_id"`
 	StartTime time.Time  `json:"start_time"`

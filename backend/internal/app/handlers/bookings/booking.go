@@ -86,12 +86,12 @@ func (h *BookingHandler) CreateBooking(c *gin.Context) {
 		req.EndTime,
 	)
 
-	if err != nil {
+	if err != nil || booking == nil {
 		c.JSON(500, h.schemas.NewErrorResponse(err.Error()))
 		return
 	}
 
-	c.JSON(200, h.schemas.NewBookingResponse(booking))
+	c.JSON(200, gin.H{"status": "success"})
 }
 
 // DeleteBooking godoc
@@ -111,6 +111,7 @@ func (h *BookingHandler) CreateBooking(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse
 // @Router /bookings [delete]
 func (h *BookingHandler) DeleteBooking(c *gin.Context) {
+
 	// Авторизация пользователя
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -152,6 +153,7 @@ func (h *BookingHandler) DeleteBooking(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse
 // @Router /bookings/info [get]
 func (h *BookingHandler) GetUserBookings(c *gin.Context) {
+
 	// Авторизация пользователя
 	userID, exists := c.Get("userID")
 	if !exists {

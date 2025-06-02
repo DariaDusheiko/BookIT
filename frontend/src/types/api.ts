@@ -25,6 +25,7 @@ export type Table = {
 }
 
 export type BookingRequest = {
+  table_id: number;
   start_time: string;
   end_time: string;
 }

@@ -318,6 +318,7 @@ export function BookingPage() {
       const end = dayjs(startTime).add(2, 'hours').format('YYYY-MM-DDTHH:mm:ss');
       
       const response = await bookingApi.createBooking({
+        table_id: selectedTable.number,
         start_time: start,
         end_time: end,
       });

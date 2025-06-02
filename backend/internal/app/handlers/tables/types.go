@@ -8,12 +8,12 @@ type GetTablesRequest struct {
 }
 
 type TableResponse struct {
-	ID          uint    `json:"id"`
-	X           int     `json:"x"`
-	Y           int     `json:"y"`
-	Angle       int     `json:"angle"`
-	SeatsNumber int     `json:"seats_number"`
-	Occupied    bool    `json:"occupied"`
+	ID          uint `json:"number"`
+	X           int  `json:"x"`
+	Y           int  `json:"y"`
+	Angle       int  `json:"angle"`
+	SeatsNumber int  `json:"seats_number"`
+	Occupied    bool `json:"occupied"`
 }
 
 type GetTablesResponse struct {

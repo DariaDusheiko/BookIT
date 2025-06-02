@@ -1,17 +1,18 @@
 package tables
 
 import (
-	"github.com/BookIT/backend/internal/app/services"
 	"net/http"
+
+	"github.com/BookIT/backend/internal/app/services"
 	"github.com/gin-gonic/gin"
 )
 
 type TableHandler struct {
-	tableService services.TableService 
+	tableService services.TableService
 	schemas      *TableSchemas
 }
 
-func NewTableHandler(tableService services.TableService) *TableHandler { 
+func NewTableHandler(tableService services.TableService) *TableHandler {
 	return &TableHandler{
 		tableService: tableService,
 		schemas:      &TableSchemas{},
@@ -34,7 +35,7 @@ func NewTableHandler(tableService services.TableService) *TableHandler {
 // @Failure 500 {object} ErrorResponse
 // @Router /tables [post]
 func (h *TableHandler) GetTables(c *gin.Context) {
-	_, exists := c.Get("userID") 
+	_, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
 		return
@@ -67,6 +68,5 @@ func (h *TableHandler) GetTables(c *gin.Context) {
 		})
 	}
 
-	c.JSON(200, gin.H{"tables": response})
+	c.JSON(200, gin.H{"list": response})
 }
-
